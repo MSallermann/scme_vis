@@ -2,6 +2,7 @@ import sys
 
 # Setting the Qt bindings for QtPy
 import os
+
 os.environ["QT_API"] = "pyqt5"
 
 from qtpy import QtWidgets
@@ -10,6 +11,9 @@ import numpy as np
 
 import pyvista as pv
 from pyvistaqt import QtInteractor, MainWindow
+
+from scme_vis.ase_qt_interactor import ASEQtInteractor
+
 
 class MyMainWindow(MainWindow):
 
@@ -21,7 +25,7 @@ class MyMainWindow(MainWindow):
         vlayout = QtWidgets.QVBoxLayout()
 
         # add the pyvista interactor object
-        self.plotter = QtInteractor(self.frame)
+        self.plotter = ASEQtInteractor(self.frame)
         vlayout.addWidget(self.plotter.interactor)
         self.signal_close.connect(self.plotter.close)
 
@@ -30,15 +34,15 @@ class MyMainWindow(MainWindow):
 
         # simple menu to demo functions
         mainMenu = self.menuBar()
-        fileMenu = mainMenu.addMenu('File')
-        exitButton = QtWidgets.QAction('Exit', self)
-        exitButton.setShortcut('Ctrl+Q')
+        fileMenu = mainMenu.addMenu("File")
+        exitButton = QtWidgets.QAction("Exit", self)
+        exitButton.setShortcut("Ctrl+Q")
         exitButton.triggered.connect(self.close)
         fileMenu.addAction(exitButton)
 
         # allow adding a sphere
-        meshMenu = mainMenu.addMenu('Mesh')
-        self.add_sphere_action = QtWidgets.QAction('Add Sphere', self)
+        meshMenu = mainMenu.addMenu("Mesh")
+        self.add_sphere_action = QtWidgets.QAction("Add Sphere", self)
         self.add_sphere_action.triggered.connect(self.add_sphere)
         meshMenu.addAction(self.add_sphere_action)
 
@@ -46,13 +50,13 @@ class MyMainWindow(MainWindow):
             self.show()
 
     def add_sphere(self):
-        """ add a sphere to the pyqt frame """
+        """add a sphere to the pyqt frame"""
         sphere = pv.Sphere()
         self.plotter.add_mesh(sphere, show_edges=True)
         self.plotter.reset_camera()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MyMainWindow()
     sys.exit(app.exec_())
