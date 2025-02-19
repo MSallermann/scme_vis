@@ -58,7 +58,13 @@ class ASEQtInteractor(QtInteractor):
                 filename = self.url.path()
                 self.atoms = read(filename)
                 print(self.atoms)
-                visualize_atoms.add_atoms_as_spheres(self, self.atoms)
+
+                colors = {1: "lightgrey", 8: "red"}
+                radii = {1: 0.1, 8: 0.15}
+
+                visualize_atoms.add_atoms_as_spheres(
+                    self, self.atoms, radii=radii, colors=colors
+                )
 
         except IOError as exception:  # pragma: no cover
             warnings.warn(f"Exception when dropping files: {str(exception)}")
